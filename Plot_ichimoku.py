@@ -123,9 +123,35 @@ def get_Ichimoku(df):
     fig.add_trace(span_a)
     fig.add_trace(span_b)
     
-    fig.update_layout(height=500, width=500, showlegend=True)
+    fig.update_layout(height=750, width=1000, showlegend=True, paper_bgcolor='rgba(0,0,0,0)')
+    fig.update_layout(xaxis=dict(
+        tickfont=dict(
+            color='white'
+        )
+    ),
+    yaxis=dict(
+        tickfont=dict(
+            color='white'
+        )
+    ))
+    fig.update_layout(
+    legend=dict(
+        
+        font=dict(
+            family="Courier",
+            size=12,
+            color="black"
+        ),
+        bgcolor="LightSteelBlue",
+        bordercolor="Black",
+        borderwidth=2
+    )
 
-    fig.show()
+   
+)
+
+    return fig
+    #fig.show()
 
 
 if __name__ == '__main__':
