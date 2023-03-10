@@ -1,6 +1,8 @@
 from website import create_app
+from website.dashapp import layout
+import Plot_ichimoku
 
-app = create_app()
+apps = create_app()
 
-if __name__ == '__main__':
-    app.run(debug=True)
+app = create_app()[0]
+dashapp = create_app()[1]

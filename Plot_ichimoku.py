@@ -124,12 +124,13 @@ def get_Ichimoku(df):
     fig.add_trace(span_b)
     
     fig.update_layout(height=750, width=1000, showlegend=True, paper_bgcolor='rgba(0,0,0,0)')
-    fig.update_layout(xaxis=dict(
+    fig.update_layout(xaxis=dict(showgrid=False,title="Ichimoku",
         tickfont=dict(
             color='white'
         )
     ),
-    yaxis=dict(
+    yaxis=dict(title="Price",
+        showgrid=False,
         tickfont=dict(
             color='white'
         )
@@ -140,9 +141,9 @@ def get_Ichimoku(df):
         font=dict(
             family="Courier",
             size=12,
-            color="black"
+            color="white"
         ),
-        bgcolor="LightSteelBlue",
+        #bgcolor="LightSteelBlue",
         bordercolor="Black",
         borderwidth=2
     )

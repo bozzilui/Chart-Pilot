@@ -9,57 +9,59 @@ from datetime import timedelta
 # Replace with your API key
 API_KEY = "0F7GUPDYDEGTFHEM"
 
-# Replace with the stock symbol you want to analyze
-STOCK_SYMBOL = "AMC"
 
-# Set the number of days to analyze
-ANALYSIS_PERIOD = 30
-start_date = '2022-12-02'
-end_date = '2022-11-01'
+def calc(ticker, start_date, end_date):
 
-# Convert the start and end dates to datetime objects
-start_date = datetime.strptime(start_date, '%Y-%m-%d')
-end_date = datetime.strptime(end_date, '%Y-%m-%d')
+    # Set the number of days to analyze
+    ANALYSIS_PERIOD = 30
+    start_date = start_date
+    end_date = start_date
 
 
-# Set the number of standard deviations for the Bollinger bands
-BOLLINGER_SD = 1
+    ticker = ticker.upper()
+    # Convert the start and end dates to datetime objects
+    start_date = datetime.strptime(start_date, '%Y-%m-%d')
+    end_date = datetime.strptime(end_date, '%Y-%m-%d')
 
-# Get the stock data from the API
-response = requests.get(f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol={STOCK_SYMBOL}&apikey={API_KEY}")
 
-# Parse the JSON data
-stock_data = json.loads(response.text)
+    # Set the number of standard deviations for the Bollinger bands
+    BOLLINGER_SD = 1
 
-# Get the list of daily prices
-daily_prices = stock_data["Time Series (Daily)"]
+    # Get the stock data from the API
+    response = requests.get(f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol={ticker}&apikey={API_KEY}")
 
-# Get the closing prices over the analysis period
-closing_prices = []
-for i in range(ANALYSIS_PERIOD):
-    for date in daily_prices.keys():
-      closing_prices.append(float(daily_prices[date]["4. close"]))
+    # Parse the JSON data
+    stock_data = json.loads(response.text)
 
-# Calculate the moving average
-moving_average = np.mean(closing_prices)
+    # Get the list of daily prices
+    daily_prices = stock_data["Time Series (Daily)"]
 
-# Calculate the standard deviation
-standard_deviation = np.std(closing_prices)
+    # Get the closing prices over the analysis period
+    closing_prices = []
+    for i in range(ANALYSIS_PERIOD):
+        for date in daily_prices.keys():
+            closing_prices.append(float(daily_prices[date]["4. close"]))
 
-# Calculate the upper and lower Bollinger bands
-upper_band = moving_average + BOLLINGER_SD * standard_deviation
-lower_band = moving_average - BOLLINGER_SD * standard_deviation
+    # Calculate the moving average
+    moving_average = np.mean(closing_prices)
 
-# Get the current price
-current_price = float(daily_prices[start_date.strftime('%Y-%m-%d')]["4. close"])
+    # Calculate the standard deviation
+    standard_deviation = np.std(closing_prices)
 
-# Check if the stock is overbought or oversold
-print(current_price)
-print(upper_band)
-print(lower_band)
-if current_price >= upper_band:
-    print("Overbought")
-elif current_price <= lower_band:
-    print("Oversold")
-else:
-    print("Neutral")
+    # Calculate the upper and lower Bollinger bands
+    upper_band = moving_average + BOLLINGER_SD * standard_deviation
+    lower_band = moving_average - BOLLINGER_SD * standard_deviation
+
+    # Get the current price
+    current_price = float(daily_prices[start_date.strftime('%Y-%m-%d')]["4. close"])
+
+    # Check if the stock is overbought or oversold
+    print(current_price)
+    print(upper_band)
+    print(lower_band)
+    if current_price >= upper_band:
+        return "Overbought"
+    elif current_price <= lower_band:
+        return "Oversold"
+    else:
+        return "Neutral"

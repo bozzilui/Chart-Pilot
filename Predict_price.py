@@ -1,11 +1,16 @@
 import numpy as np
 import yfinance as yf
 from sklearn.tree import DecisionTreeRegressor
+import datetime
 
-def predict_stock_prices(ticker: str):
+def predict_stock_prices(ticker: str, start_date, end_date):
+  print(type(ticker))
+
+
+
   # Collect the stock data
   stock = yf.Ticker(ticker.upper())
-  df = stock.history(start='2022-10-01', end='2022-12-30')
+  df = stock.history(start=start_date, end=end_date)
 
   df = df.sample(frac=1)
   # Extract the relevant columns from the dataframe
@@ -24,7 +29,8 @@ def predict_stock_prices(ticker: str):
 
   # Use the trained model to make predictions on new data
   prediction = np.mean(reg.predict(X_test))
-  print(prediction)
+  prediction = round(prediction,2)
+  return prediction
 
 if __name__ == "__main__":
   stock = input("Please enter a stock ticker symbol: ")

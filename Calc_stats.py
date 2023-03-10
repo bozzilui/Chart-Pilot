@@ -52,7 +52,7 @@ warnings.simplefilter("ignore")
 PATH = "Tickers/"
 
 S_DATE = "2019-01-01"
-E_DATE = "2022-12-09"
+E_DATE = "2023-03-08"
 
 S_DATE_DT = pd.to_datetime(S_DATE)
 E_DATE_DT = pd.to_datetime(E_DATE)

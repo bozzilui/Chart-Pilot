@@ -1,8 +1,11 @@
 from flask import Flask
 import dash
+from dash import dcc, html
 from flask_sqlalchemy import SQLAlchemy
+from website.dashapp import layout
 from os import path
 from flask_login import LoginManager
+import dash_bootstrap_components as dbc
 import dash_html_components as html
 
 db = SQLAlchemy()
@@ -11,10 +14,9 @@ DB_NAME = "database.db"
 
 def create_app():
     app = Flask(__name__)
-    app_dash = dash.Dash(__name__, server=app, url_base_pathname='/dashboard/')
-
-    app_dash.layout = html.Div([html.H1('Hi there, I am app for dashboards')])
-
+    app_dash = dash.Dash(__name__, server=app,external_stylesheets=[dbc.themes.CYBORG], url_base_pathname='/dashboard/')
+    app_dash.layout = layout.dashboard("MSFT")
+    
     app.config['SECRET_KEY'] = 'hello'
     app.config["SQLALCHEMY_DATABASE_URI"] = f'sqlite:///{DB_NAME}'
     db.init_app(app)
@@ -39,8 +41,7 @@ def create_app():
     def load_user(id):
         return User.query.get(int(id))
 
-    
-    return app
+    return (app, app_dash)
 
 def create_database(app):
     if not path.exists('website/' + DB_NAME):
