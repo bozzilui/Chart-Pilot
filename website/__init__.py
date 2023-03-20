@@ -16,7 +16,7 @@ def create_app():
     app = Flask(__name__)
     app_dash = dash.Dash(__name__, server=app,external_stylesheets=[dbc.themes.CYBORG], url_base_pathname='/dashboard/')
     app_dash.layout = layout.dashboard("MSFT")
-    
+    app_dash.title = "Dashboard"
     app.config['SECRET_KEY'] = 'hello'
     app.config["SQLALCHEMY_DATABASE_URI"] = f'sqlite:///{DB_NAME}'
     db.init_app(app)

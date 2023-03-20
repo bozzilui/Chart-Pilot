@@ -110,7 +110,7 @@ def dashboard(ticker):
             ),
         ]
     ),
-    color="#272b34",
+    color="#11171a",
     dark=True,
     )
 
@@ -136,26 +136,34 @@ def dashboard(ticker):
     ],
     )
 
-    first_card = dbc.Card(
-    dbc.CardBody(
-        [
-            dbc.Row([dbc.Col(html.H5("Predicted Price")),dbc.Col(html.H5("Status")),dbc.Col(html.H5("Overbought/Oversold"))]),
-            
-            dbc.Row([dbc.Col(html.H5(id="price")),dbc.Col(html.H5(id="status")),dbc.Col(html.H5(id="Over"))]),
-
-            html.P("Data based off selected date range"),
-        ]
-        )
-    )
+   
 
     date_picker = dcc.DatePickerRange(id="date",
     month_format='MMMM Y',
     start_date_placeholder_text="Start Period",
     end_date_placeholder_text='End Period',
     end_date=date.today(),
-    style={'background-color': colors['background'], 'padding': '40px'}
+    style={'background-color': 'black'}
     )
     
+    first_card = dbc.Card(
+        dbc.CardBody(
+            dbc.Row(
+            [   
+
+                dbc.Col([date_picker], width={'size':2}),
+
+                dbc.Col([
+                dbc.Row([dbc.Col(html.H5("Predicted Price")),dbc.Col(html.H5("Status")),dbc.Col(html.H5("Overbought/Oversold"))]),
+                
+                dbc.Row([dbc.Col(html.H5(id="price")),dbc.Col(html.H5(id="status")),dbc.Col(html.H5(id="Over"))]),
+
+                html.P("Data based off selected date range"),])
+            ], style={'padding-right': '0', 'padding-left':'0'}
+            )
+            )
+        )
+
     ticker_drop = dcc.Dropdown(id='input', options=[{'label': i, 'value': i} for i in tickers], 
             placeholder="Select a Stock Ticker",
             style=dict(display='incline-block',backgroundColor=colors["background"]))
@@ -166,9 +174,9 @@ def dashboard(ticker):
         html.Div(children=[dbc.Card(dbc.CardBody([
             dbc.Row([dbc.Col(ticker_drop,width={'size':9}), dbc.Col(select_chart, width={'offset': 1,})], style={"margin-bottom":'10px'}),
 
-            dcc.Graph(id='my-graph', figure=fig, responsive=True)]),style={'width':'w-50'}),
+            dcc.Graph(id='my-graph', figure=fig, responsive=True)]),style={'width':'w-50', 'height': '500px'}),
 
-            html.Div([dbc.Row([dbc.Col([date_picker],width=4), dbc.Col(first_card, width=8)]),
+            html.Div([dbc.Row([first_card]),
             ], style={'backgroundColor':colors['background']}) 
             
         ]),
