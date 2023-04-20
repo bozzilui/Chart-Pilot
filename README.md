@@ -1,5 +1,7 @@
 # Chart Pilot
 
+Repository Link: https://github.com/bozzilui/Chart-Pilot
+
 Chart pilot is a simple stock charting application built using flask and dash.
 
 I created this application so that creating charts for your stocks can all be done seamlessly.
