@@ -1,4 +1,6 @@
 import dash_core_components as dcc
+from dash import dash_table
+import os
 import dash_bootstrap_components as dbc
 import dash_html_components as html
 import Plot_ichimoku
@@ -16,8 +18,7 @@ def get_column_from_csv(file, col_name):
         return df[col_name]
 
 def dashboard(ticker):
-
-    tickers = get_column_from_csv("C:/Users/owner/Desktop/Stocks and Files/Python4Finance-main/Wilshire-5000-Stocks.csv", "Ticker")
+    tickers = get_column_from_csv(f"{os.getcwd()}/Wilshire-5000-Stocks.csv", "Ticker")
 
     colors = {
     'background': '#111111',
@@ -62,7 +63,7 @@ def dashboard(ticker):
             children=[
                 dbc.DropdownMenuItem("More pages", header=True),
                 dbc.DropdownMenuItem("Logout", href="/logout", external_link=True),
-                dbc.DropdownMenuItem("Sign up", href="/sign-up", external_link=True),
+                
             ],
             nav=True,
             in_navbar=True,
@@ -83,7 +84,7 @@ def dashboard(ticker):
     align="center",
     )
     
-    test_png = 'website\dashapp\chartpilotlogo.png'
+    test_png = 'website/dashapp/chartpilotlogo.png'
     test_base64 = base64.b64encode(open(test_png, 'rb').read()).decode('ascii')
 
     navbar = dbc.Navbar(
@@ -136,7 +137,13 @@ def dashboard(ticker):
     ],
     )
 
-   
+    stock_crypto = dbc.DropdownMenu(
+    label="Trading",
+    children=[
+        dbc.DropdownMenuItem("Stocks"),
+        dbc.DropdownMenuItem("Crypto"),
+    ],
+    )
 
     date_picker = dcc.DatePickerRange(id="date",
     month_format='MMMM Y',
@@ -164,19 +171,40 @@ def dashboard(ticker):
             )
         )
 
+
+    portfolio = dash_table.DataTable
+
+
+    second_card = dbc.Card(
+        dbc.CardBody(
+            dbc.Row(
+            [   
+
+                dbc.Row([html.H5("Your Portfolio")])
+
+            ], style={'padding-right': '0', 'padding-left':'0'}
+            )
+            )
+        )
+
+
     ticker_drop = dcc.Dropdown(id='input', options=[{'label': i, 'value': i} for i in tickers], 
             placeholder="Select a Stock Ticker",
             style=dict(display='incline-block',backgroundColor=colors["background"]))
 
-
+    # Layout for the entire page
     layout = html.Div(id='main', children=[
         navbar,
         html.Div(children=[dbc.Card(dbc.CardBody([
+            
             dbc.Row([dbc.Col(ticker_drop,width={'size':9}), dbc.Col(select_chart, width={'offset': 1,})], style={"margin-bottom":'10px'}),
 
             dcc.Graph(id='my-graph', figure=fig, responsive=True)]),style={'width':'w-50', 'height': '500px'}),
 
             html.Div([dbc.Row([first_card]),
+            ], style={'backgroundColor':colors['background']}),
+
+            html.Div([dbc.Row([second_card]),
             ], style={'backgroundColor':colors['background']}) 
             
         ]),

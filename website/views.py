@@ -10,6 +10,10 @@ import Plot_ichimoku
 
 views = Blueprint('views', __name__)
 
+@views.route('/front')
+@login_required
+def dashboard():
+    return render_template("front.html", user=current_user)
 
 @views.route('/home')
 @login_required
